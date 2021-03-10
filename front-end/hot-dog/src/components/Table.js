@@ -1,5 +1,6 @@
 import React from 'react';
 import TableRow from './TableRow';
+import { Link } from 'react-router-dom';
 
 class Table extends React.Component {
   constructor(props) {
@@ -16,13 +17,13 @@ class Table extends React.Component {
       {
         menuID: this.props.apiResponse.menu.menuID,
         id: idList,
-        status: true
+        status: true,
       },
       () => {
-        fetch('http://localhost:8000/vendor/menu', {
+        fetch('http://localhost:5000/vendor/menu', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.state)
+          body: JSON.stringify(this.state),
         })
           .then((res) => res.text())
           // Extra feature: add a pop up stating whether update was successful
@@ -70,7 +71,11 @@ class Table extends React.Component {
           {this.renderItems()}
           <tfoot className="full-width">
             <tr>
-              <th></th>
+              <th>
+                <Link to={`/vendor/${this.props.apiResponse.vendorID}`}>
+                  <button className="ui large gray button">Back to main</button>
+                </Link>
+              </th>
               <th colSpan="5">
                 <button
                   className="ui right floated medium green button"
