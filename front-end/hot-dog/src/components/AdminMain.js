@@ -1,7 +1,6 @@
 import React from 'react';
 import Banner from './Banner';
 import Container from './Container';
-import Box from './Box';
 import { Link } from 'react-router-dom';
 
 class AdminMain extends React.Component {
@@ -12,12 +11,34 @@ class AdminMain extends React.Component {
         <div className="ui grid">
           <div className="three wide column" style={{ marginTop: '1em' }}>
             <div className="ui vertical menu">
-              <Link to="/admin/carts">
-                <div className="item">Carts</div>
-              </Link>
-              <div className="item">Users</div>
-              <div className="item">Menu</div>
-              <div className="item">Logs</div>
+              <div className="item">
+                <Link to="/" className="admin">
+                  Home
+                </Link>
+              </div>
+              <div className="item">
+                <Link to="/admin/carts" className="admin">
+                  Carts
+                </Link>
+              </div>
+
+              <div className="item">
+                <Link to="/admin/users" className="admin">
+                  Users
+                </Link>
+              </div>
+
+              <div className="item ">
+                <Link to="/admin/menu" className="admin">
+                  Menus & Items
+                </Link>
+              </div>
+
+              <div className="item ">
+                <Link to="/admin/logs" className="admin">
+                  Logs
+                </Link>
+              </div>
             </div>
           </div>
           <div className="thirteen wide column" style={{ marginTop: '1em' }}>

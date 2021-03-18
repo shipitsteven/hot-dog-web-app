@@ -3,6 +3,7 @@ USE mydb;
 INSERT INTO ITEMS (ITEM_NAME, ITEM_CATEGORY, PRICE, DESCRIPTION_ITEM)
 VALUES 	("Seattle Dog", "Food", 499, "Our most popular item the Seattle Dog. Cream cheese, relish, beef dog, on brioche bun."),
 		("Plain Hot Dog", "Food", 349, "Keeping it simple"),
+        ("Bailey Dog", "Food", 777, "Named after Eric's lovely dog. An all beef dog with extra awesome bacon bits and cheedar cheese."),
         ("Double Dog", "Food", 599, "Take a plain and make it double"),
         ("Chicago", "Food", 499, "Mustard, onion, relish, dill pickle, sport peppers, and tomato"),
         ("New York", "Food", 499, "Mustard, sauerkraut, onion sauce"),
@@ -29,16 +30,17 @@ VALUES 	("This is the cart located in Ballard", "Ballard"),
 ;
 
 INSERT INTO USERS (EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PERMISSION)
-VALUES 	("admin@website.com", "adminpass", "adminFirst", "adminLast", "ADMIN"),
+VALUES 	("admin@website.com", "adminpass", "Default", "Admin", "ADMIN"),
         ("user1@website.com", "pass1", "Homer", "Simpson", "CUSTOMER"),
 		("user2@website.com", "pass1", "Baby", "Huey", "CUSTOMER"),
-        ("user3@url.com", "pass1", "custfirst1", "custlast1", "CUSTOMER"),
+        ("user3@url.com", "pass1", "Juicy", "J", "CUSTOMER"),
         ("vendor1@website.com", "vpass1", "Bobby", "Flay", "VENDOR"),
         ("vendor2@website.com", "vpass2", "Wolfgang", "Puck", "VENDOR"),
         ("admin@website.com", "apass1", "Best", "Boss", "ADMIN"),
         ("angrychef@gmail.com", "itsraw", "Gordan", "Ramsey", "VENDOR"),
         ("ilikedonuts@simpson.com", "yumyum", "Homer", "Simpson", "VENDOR"),
-        ("ilikedonuts@simpson.com", "yumyum", "Rick", "Sanchez", "VENDOR")
+        ("ilikedonuts@simpson.com", "yumyum", "Rick", "Sanchez", "VENDOR"),
+        ("unemployed@me.com", "yikes", "Donald", "Duck", "VENDOR")
 ;
 
 INSERT INTO ITEMS_MENU(MENU_ID, ITEM_ID, AVAILABLE)

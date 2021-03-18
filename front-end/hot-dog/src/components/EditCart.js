@@ -23,7 +23,11 @@ const validationSchema = Yup.object().shape({
 class EditCart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { apiResponse: {} };
+    this.state = {
+      apiResponse: {},
+      formSuccess: false,
+      resMessage: '',
+    };
   }
 
   componentDidMount() {
@@ -35,20 +39,12 @@ class EditCart extends React.Component {
     if (!isNaN(id)) {
       fetch(`http://localhost:5000/admin/carts/edit/${id}`)
         .then((res) => res.json())
-        .then((res) =>
-          this.setState({ apiResponse: res }, () =>
-            console.log(this.state.apiResponse)
-          )
-        )
+        .then((res) => this.setState({ apiResponse: res }))
         .catch((error) => console.log(error));
     } else if (this.props.match.url === '/admin/carts/new') {
       fetch(`http://localhost:5000/admin/carts/new`)
         .then((res) => res.json())
-        .then((res) =>
-          this.setState({ apiResponse: res }, () =>
-            console.log(this.state.apiResponse)
-          )
-        )
+        .then((res) => this.setState({ apiResponse: res }))
         .catch((error) => console.log(error));
     }
   }
@@ -61,6 +57,52 @@ class EditCart extends React.Component {
         </option>
       ));
     }
+  }
+
+  renderVacantVendors() {
+    if (this.state.apiResponse.vendors) {
+      return this.state.apiResponse.vendors.map((vendor) => (
+        <option key={vendor.User_ID} value={`${vendor.User_ID}`}>
+          {`${vendor.User_ID}-${vendor.First_Name} ${vendor.Last_Name}`}
+        </option>
+      ));
+    }
+  }
+
+  // TODO: add error message display
+  sendRequest(values) {
+    if (this.props.match.url === '/admin/carts/new') {
+      fetch(`http://localhost:5000/admin/carts/new`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      })
+        .then((res) => res.text())
+        .then((res) => {
+          this.setState({ formSuccess: true, resMessage: res });
+        })
+        .catch((err) => console.log(err));
+    } else {
+      fetch(
+        `http://localhost:5000/admin/carts/edit/${this.props.match.params.id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            cartID: parseInt(this.props.match.params.id),
+            ...values,
+          }),
+        }
+      )
+        .then((res) => res.text())
+        .then((res) => {
+          this.setState({ formSuccess: true, resMessage: res });
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+  refreshPage() {
+    window.location.reload();
   }
 
   render() {
@@ -76,6 +118,12 @@ class EditCart extends React.Component {
           <Link to="/admin/carts">
             <button className="ui button">Back to carts</button>
           </Link>
+          <button
+            onClick={this.refreshPage}
+            className="ui inverted primary button"
+          >
+            Refresh
+          </button>
           <Box>
             <p>
               Useful Link:{' '}
@@ -88,6 +136,19 @@ class EditCart extends React.Component {
               </a>
             </p>
           </Box>
+
+          <div
+            className={`ui success message ${
+              this.state.formSuccess ? null : `hidden`
+            }`}
+          >
+            <h4 className="header">{this.state.resMessage}</h4>
+            <p>
+              Refresh the page or go back to the carts page to see the latest
+              changes
+            </p>
+          </div>
+
           <Formik
             enableReinitialize={true}
             initialValues={{
@@ -95,15 +156,13 @@ class EditCart extends React.Component {
               lng: lng || '',
               menuID: menuID || '',
               vendorID: vendorID || '',
-              status: status || '',
+              status: status || false,
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                resetForm();
-                setSubmitting(false);
-              }, 500);
+              this.sendRequest(values);
+              resetForm();
+              setSubmitting(false);
             }}
           >
             {({
@@ -115,10 +174,12 @@ class EditCart extends React.Component {
               handleSubmit,
               isSubmitting,
             }) => (
-              <form className="ui form" onSubmit={handleSubmit}>
+              <form className={`ui form`} onSubmit={handleSubmit}>
                 {/* {`Debug message: ${JSON.stringify(values)}`} */}
                 <h3 className="ui centered dividing header">
-                  Cart ID - {this.props.match.params.id || 'new cart'}
+                  {this.props.match.params.id
+                    ? `Editing Cart ID - ${this.props.match.params.id}`
+                    : 'Creating New Cart'}
                 </h3>
                 <div className="two fields">
                   <div
@@ -168,12 +229,16 @@ class EditCart extends React.Component {
                     <Error touched={touched.menuID} message={errors.menuID} />
                   </div>
                   <div className="field">
-                    {/* TODO: dynamically generate vacant vendors, if the cart belongs to an existing vendor, render their id */}
                     <label>(Optional) Vendor ID</label>
                     <Field as="select" name="vendorID">
                       <option value="">(Optional) assign a vendor</option>
-                      <option value="0">0</option>
-                      <option value="1">1</option>
+                      {this.renderVacantVendors()}
+                      <option
+                        value="remove"
+                        style={{ color: 'crimson', fontStyle: 'italic' }}
+                      >
+                        Release vendor from this cart
+                      </option>
                     </Field>
                   </div>
                 </div>

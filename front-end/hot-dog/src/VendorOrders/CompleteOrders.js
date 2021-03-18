@@ -14,7 +14,7 @@ class AllOrders extends React.Component{
     }
 
     getData = () => {
-        fetch(`http://localhost:5000/vendor/orders/${this.props.cartID}`)
+        fetch(`http://localhost:5000/vendor/orders/complete/${this.props.cartID}`)
         .then(response => {
             if (response.ok) {
                     return response;
