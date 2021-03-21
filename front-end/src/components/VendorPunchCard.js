@@ -7,7 +7,7 @@ class VendorPunchCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      apiResponse: {}
+      apiResponse: {},
     };
   }
 
@@ -16,7 +16,7 @@ class VendorPunchCard extends React.Component {
   }
 
   callAPI() {
-    fetch(`http://localhost:5000/vendor/`)
+    fetch(`${process.env.REACT_APP_SERVER_URL}/vendor/`)
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res, dataReceived: true }))
       .catch((err) => console.log(err));

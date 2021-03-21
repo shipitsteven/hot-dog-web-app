@@ -11,7 +11,7 @@ class VendorMenu extends React.Component {
 
   callAPI() {
     let id = this.props.match.params.id;
-    fetch('http://localhost:5000/vendor/menu/' + id)
+    fetch(`${process.env.REACT_APP_SERVER_URL}/vendor/menu/` + id)
       .then((res) => res.json())
       .then((res) => {
         this.setState({ apiResponse: res });

@@ -16,7 +16,7 @@ class AdminCarts extends React.Component {
   }
 
   callAPI() {
-    fetch('http://localhost:5000/admin/carts')
+    fetch(`${process.env.REACT_APP_SERVER_URL}/admin/carts`)
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res }))
       .catch((err) => console.log(err));
