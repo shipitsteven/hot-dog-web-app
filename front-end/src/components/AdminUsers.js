@@ -14,7 +14,7 @@ class AdminUsers extends React.Component {
   }
 
   callAPI() {
-    fetch('http://localhost:5000/admin/users')
+    fetch(`${process.env.REACT_APP_SERVER_URL}/admin/users`)
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res }))
       .catch((err) => console.log(err));

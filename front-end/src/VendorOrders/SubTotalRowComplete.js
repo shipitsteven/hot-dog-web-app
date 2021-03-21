@@ -20,9 +20,10 @@ class SubTotalRow extends React.Component {
   completeOrder = () => {
     if (this.props.order !== undefined) {
       let url =
-        'http://localhost:5000/vendor/orders/complete/' + this.props.order;
+        `${process.env.REACT_APP_SERVER_URL}/vendor/orders/complete/` +
+        this.props.order;
       fetch(url, {
-        method: 'POST'
+        method: 'POST',
       })
         .then((res) => res.text())
         .catch((err) => console.err(err));

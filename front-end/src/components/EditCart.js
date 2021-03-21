@@ -37,12 +37,12 @@ class EditCart extends React.Component {
   callAPI() {
     let id = this.props.match.params.id;
     if (!isNaN(id)) {
-      fetch(`http://localhost:5000/admin/carts/edit/${id}`)
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/carts/edit/${id}`)
         .then((res) => res.json())
         .then((res) => this.setState({ apiResponse: res }))
         .catch((error) => console.log(error));
     } else if (this.props.match.url === '/admin/carts/new') {
-      fetch(`http://localhost:5000/admin/carts/new`)
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/carts/new`)
         .then((res) => res.json())
         .then((res) => this.setState({ apiResponse: res }))
         .catch((error) => console.log(error));
@@ -72,7 +72,7 @@ class EditCart extends React.Component {
   // TODO: add error message display
   sendRequest(values) {
     if (this.props.match.url === '/admin/carts/new') {
-      fetch(`http://localhost:5000/admin/carts/new`, {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/carts/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
@@ -84,7 +84,7 @@ class EditCart extends React.Component {
         .catch((err) => console.log(err));
     } else {
       fetch(
-        `http://localhost:5000/admin/carts/edit/${this.props.match.params.id}`,
+        `${process.env.REACT_APP_SERVER_URL}/admin/carts/edit/${this.props.match.params.id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

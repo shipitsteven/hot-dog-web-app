@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import TableRow from './TableRow';
-
-let testData = require('./testdata.json');
-// const fetch = require('node-fetch');
 
 class Table extends React.Component {
   constructor(props) {
@@ -15,7 +12,7 @@ class Table extends React.Component {
   }
 
   getData = () => {
-    fetch('http://localhost:5000/customer/1')
+    fetch(`${process.env.REACT_APP_SERVER_URL}/customer/1`)
       .then((response) => {
         if (response.ok) {
           return response;

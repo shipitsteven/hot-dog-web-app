@@ -10,20 +10,20 @@ class VendorMain extends React.Component {
     super(props);
     this.state = {
       apiResponse: {},
-      newLocation: {}
+      newLocation: {},
     };
   }
 
   callAPI() {
     let id = this.props.match.params.id;
-    fetch(`http://localhost:5000/vendor/${id}`)
+    fetch(`${process.env.REACT_APP_SERVER_URL}/vendor/${id}`)
       .then((res) => res.json())
       .then((res) => {
         this.setState({
           apiResponse: res,
           available: res.cart[0].available,
           center: { lat: res.cart[0].lat, lng: res.cart[0].lng },
-          error: false
+          error: false,
         });
       })
       .catch((err) => {
@@ -31,11 +31,11 @@ class VendorMain extends React.Component {
         this.setState({
           apiResponse: {
             vendorFirstName: 'something went wrong',
-            vendorLastName: ''
+            vendorLastName: '',
           },
           error: true,
           message:
-            'Please make sure you have valid permission and the correct vendor ID'
+            'Please make sure you have valid permission and the correct vendor ID',
         });
       });
   }
@@ -47,14 +47,14 @@ class VendorMain extends React.Component {
   updateStatus = () => {
     let id = this.props.match.params.id;
     this.setState({ available: !this.state.available }, () => {
-      fetch(`http://localhost:5000/vendor/${id}`, {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/vendor/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           reqType: 'status',
           cartID: this.state.apiResponse.cart[0].id,
-          status: this.state.available
-        })
+          status: this.state.available,
+        }),
       })
         .then((res) => res.text())
         .then((res) => console.log(res))
@@ -68,14 +68,14 @@ class VendorMain extends React.Component {
 
   updateLocation = () => {
     let id = this.props.match.params.id;
-    fetch(`http://localhost:5000/vendor/${id}`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/vendor/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         reqType: 'location',
         cartID: this.state.apiResponse.cart[0].id,
-        newLocation: `${this.state.newLocation.lat},${this.state.newLocation.lng}`
-      })
+        newLocation: `${this.state.newLocation.lat},${this.state.newLocation.lng}`,
+      }),
     })
       .then((res) => res.text())
       .then((res) => console.log(res))
@@ -88,7 +88,7 @@ class VendorMain extends React.Component {
   render() {
     const { vendorFirstName, vendorLastName } = this.state.apiResponse;
     let cartID;
-    if(this.state.apiResponse.cart !== undefined ){
+    if (this.state.apiResponse.cart !== undefined) {
       cartID = this.state.apiResponse.cart[0].id;
     } else {
       cartID = 0;
@@ -136,11 +136,7 @@ class VendorMain extends React.Component {
             </div>
             <div className="column">
               <Link to={`/vendor/orders/${cartID}`}>
-                <button
-                  className="large ui blue button"
-                >
-                  Manage Orders
-                </button>
+                <button className="large ui blue button">Manage Orders</button>
               </Link>
             </div>
             <div className="column">

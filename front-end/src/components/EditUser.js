@@ -30,7 +30,7 @@ class EditUser extends React.Component {
   callAPI() {
     let id = this.props.match.params.id;
     if (!isNaN(id)) {
-      fetch(`http://localhost:5000/admin/users/edit/${id}`)
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/users/edit/${id}`)
         .then((res) => res.json())
         .then((res) => this.setState({ apiResponse: res }))
         .catch((error) => console.log(error));
@@ -39,7 +39,7 @@ class EditUser extends React.Component {
 
   sendRequest(values) {
     if (this.props.match.url === '/admin/users/new') {
-      fetch(`http://localhost:5000/admin/users/new`, {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/users/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
@@ -51,7 +51,7 @@ class EditUser extends React.Component {
         .catch((err) => console.log(err));
     } else {
       fetch(
-        `http://localhost:5000/admin/users/edit/${this.props.match.params.id}`,
+        `${process.env.REACT_APP_SERVER_URL}/admin/users/edit/${this.props.match.params.id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

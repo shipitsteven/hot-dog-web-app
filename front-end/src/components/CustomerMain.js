@@ -7,7 +7,7 @@ class CustomerMain extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      apiResponse: {}
+      apiResponse: {},
     };
   }
 
@@ -16,7 +16,7 @@ class CustomerMain extends React.Component {
   }
 
   callAPI() {
-    fetch('http://localhost:5000/customer/map')
+    fetch(`${process.env.REACT_APP_SERVER_URL}/customer/map`)
       .then((res) => res.json())
       .then((res) =>
         this.setState(
@@ -24,8 +24,8 @@ class CustomerMain extends React.Component {
             apiResponse: res,
             center: {
               lat: res.cart[0].lat,
-              lng: res.cart[0].lng
-            }
+              lng: res.cart[0].lng,
+            },
           },
           () => console.log(this.state.apiResponse)
         )

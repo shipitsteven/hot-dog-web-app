@@ -35,7 +35,7 @@ class EditMenu extends React.Component {
   callAPI() {
     let id = this.props.match.params.id;
     if (!isNaN(id)) {
-      fetch(`http://localhost:5000/admin/menu/edit/${id}`)
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/menu/edit/${id}`)
         .then((res) => res.json())
         .then((res) =>
           this.setState({ apiResponse: res }, this.genCurrentItemOptions)
@@ -78,7 +78,7 @@ class EditMenu extends React.Component {
 
   sendRequest(values) {
     fetch(
-      `http://localhost:5000/admin/menu/edit/${this.props.match.params.id}`,
+      `${process.env.REACT_APP_SERVER_URL}/admin/menu/edit/${this.props.match.params.id}`,
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

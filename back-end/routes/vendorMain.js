@@ -11,17 +11,16 @@ const queries = {
   updateCartStatus: 'UPDATE Cart SET AVAILABLE = ? WHERE Cart_ID = ?;',
   updateCartLocation: 'UPDATE Cart SET location = ? WHERE cart_ID = ?;',
   getAllVendorInfo:
-    'SELECT USER_ID, First_Name, Last_Name FROM users WHERE permission = "VENDOR";'
+    'SELECT USER_ID, First_Name, Last_Name FROM users WHERE permission = "VENDOR";',
 };
 
-router.get('/cartid/:vendorid', async(req, res) =>{
-  let getCartIDQuery =
-  `select * from users_cart
+router.get('/cartid/:vendorid', async (req, res) => {
+  let getCartIDQuery = `select * from users_cart
   where cart_id = ${req.params.vendorid}; 
-  `
+  `;
   let data = await db.promise().query(getCartIDQuery);
   res.send(data[0][0]);
-})
+});
 
 /**
  * Used by vendor main to get it's cart location, menu_ID, and cart_ID
@@ -95,9 +94,9 @@ function makeJSON(dbResult) {
           lat: parseFloat(locArr[0]),
           lng: parseFloat(locArr[1]),
           menuID: dbResult[0].Menu_ID,
-          available: dbResult[0].Available === 'Y' ? true : false
-        }
-      ]
+          available: dbResult[0].Available === 'Y' ? true : false,
+        },
+      ],
     };
     return obj;
   }

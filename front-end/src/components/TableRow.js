@@ -6,7 +6,7 @@ class TableRow extends React.Component {
     this.state = {
       menuID: null,
       id: 0,
-      status: false
+      status: false,
     };
   }
 
@@ -14,7 +14,7 @@ class TableRow extends React.Component {
     this.setState({
       menuID: this.props.menuID,
       id: this.props.id,
-      status: this.props.status
+      status: this.props.status,
     });
   }
 
@@ -47,10 +47,10 @@ class TableRow extends React.Component {
 
   handleChange = (event) => {
     this.setState({ status: event.target.checked }, () => {
-      fetch('http://localhost:5000/vendor/menu', {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/vendor/menu`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.state)
+        body: JSON.stringify(this.state),
       })
         .then((res) => res.text())
         .then((res) => console.log(res))
