@@ -10,13 +10,13 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  Build:
+    name: build
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [14.x, 15.x]
+        node-version: [14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -29,8 +29,12 @@ jobs:
     - run: npm run-script build --if-present
     - run: npm test
     
+  Lint:
+    name: super-linter
+    runs-on: ubuntu-latest
+    steps:
     - name: Checkout Code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
       with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
         fetch-depth: 0
