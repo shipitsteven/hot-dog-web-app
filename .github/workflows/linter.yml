@@ -1,21 +1,21 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+# name: Node.js CI
 
-on: [push, pull_request]
+# on: [push, pull_request]
 
-jobs:
-  eslint:
-    name: ESLint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: stefanoeb/eslint-action@1.0.2
+# jobs:
+#   eslint:
+#     name: ESLint
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v1
+#       - uses: stefanoeb/eslint-action@1.0.2
 
-  # style-lint:
-  #   name: Stylelint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions-hub/stylelint@master
+# style-lint:
+#   name: Stylelint
+#   runs-on: ubuntu-latest
+#   steps:
+#     - uses: actions/checkout@v2
+#     - uses: actions-hub/stylelint@master
