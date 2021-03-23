@@ -3,11 +3,9 @@
 
 name: Node.js CI
 
-on:
-  [push, pull_request]
-  
+on: [push, pull_request]
+
 jobs:
- 
   eslint:
     name: ESLint
     runs-on: ubuntu-latest
@@ -17,10 +15,9 @@ jobs:
         with:
           files: front-end/*, back-end/*
 
-  style-lint:
-    name: Stylelint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-hub/stylelint@master
-
+  # style-lint:
+  #   name: Stylelint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions-hub/stylelint@master
