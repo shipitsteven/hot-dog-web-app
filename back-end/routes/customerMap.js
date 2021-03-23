@@ -5,7 +5,7 @@ const db = require('../database/connection');
 
 const queries = {
   getAllCart:
-    'SELECT Cart_ID, First_Name, Last_Name, Menu_ID, Available, Location FROM Cart JOIN users_cart USING (cart_ID) JOIN users USING (user_id);'
+    'SELECT Cart_ID, First_Name, Last_Name, Menu_ID, Available, Location FROM Cart JOIN users_cart USING (cart_ID) JOIN users USING (user_id);',
 };
 
 router.get('/', async (req, res) => {
@@ -24,7 +24,7 @@ function makeJSON(dbResult) {
       Menu_ID: cart.Menu_ID,
       Available: cart.Available === 'Y' ? true : false,
       lat: parseFloat(locArr[0]),
-      lng: parseFloat(locArr[1])
+      lng: parseFloat(locArr[1]),
     };
     return item;
   });
