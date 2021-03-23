@@ -1,10 +1,41 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-# name: Node.js CI
+name: Node.js CI
 
-# on: [push, pull_request]
+on: [push, pull_request]
 
+jobs:
+  build:
+    # Name the Job
+    name: Lint Code Base
+    # Set the agent to run on
+    runs-on: ubuntu-latest
+
+    ##################
+    # Load all steps #
+    ##################
+    steps:
+      ##########################
+      # Checkout the code base #
+      ##########################
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+
+      ################################
+      # Run Linter against code base #
+      ################################
+      - name: Lint Code Base
+        uses: github/super-linter@v3
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          DEFAULT_BRANCH: main
+          JAVASCRIPT_DEFAULT_STYLE: prettier
+          LOG_LEVEL: VERBOSE
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 # jobs:
 #   eslint:
 #     name: ESLint
