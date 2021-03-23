@@ -4,11 +4,8 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: '*'
-  pull_request:
-    branches: [ main ]
-
+  [push, pull_request]
+  
 jobs:
   Build:
     name: build
@@ -39,6 +36,6 @@ jobs:
     - name: Lint Code Base
       uses: docker://github/super-linter:v3.15.5
       env:
-        VALIDATE_ALL_CODEBASE: false
+        VALIDATE_ALL_CODEBASE: true
         DEFAULT_BRANCH: main
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
