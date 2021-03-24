@@ -103,6 +103,19 @@ class EditMenu extends React.Component {
     window.location.reload();
   }
 
+  disableButton(touched, errors) {
+    if (this.props.match.url === '/admin/menu/new') {
+      return (
+        !touched.title ||
+        !touched.description ||
+        errors.title ||
+        errors.description
+      );
+    } else {
+      return errors.title || errors.description;
+    }
+  }
+
   render() {
     return (
       <AdminMain>
@@ -159,7 +172,7 @@ class EditMenu extends React.Component {
                 <h3 className="ui centered dividing header">
                   {this.props.match.params.id
                     ? `Editing Menu ID - ${this.props.match.params.id}`
-                    : 'Creating New Item'}
+                    : 'Creating New Menu'}
                 </h3>
 
                 <div
@@ -235,7 +248,7 @@ class EditMenu extends React.Component {
                 <button
                   className="ui large green button"
                   type="submit"
-                  disabled={errors.title || errors.description}
+                  disabled={this.disableButton(touched, errors)}
                 >
                   Submit
                 </button>
