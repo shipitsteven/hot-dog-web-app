@@ -13,9 +13,9 @@ const validationSchema = Yup.object().shape({
     .max(45, 'Title cannot have more than 45 characters')
     .required('Title cannot be empty'),
   description: Yup.string()
-    .min(1, 'Title cannot be less than 1 character')
-    .max(45, 'Title cannot have more than 45 characters')
-    .required('Title cannot be empty'),
+    .min(1, 'Description cannot be less than 1 character')
+    .max(45, 'Description cannot have more than 45 characters')
+    .required('Description cannot be empty'),
 });
 
 class EditMenu extends React.Component {
@@ -41,17 +41,21 @@ class EditMenu extends React.Component {
           this.setState({ apiResponse: res }, this.genCurrentItemOptions)
         )
         .catch((error) => console.log(error));
-      // } else if (this.props.match.url === '/admin/menu/new') {
-      //   fetch(`http://localhost:5000/admin/menu/new`)
-      //     .then((res) => res.json())
-      //     .then((res) => this.setState({ apiResponse: res }))
-      //     .catch((error) => console.log(error));
-      // }
+    } else if (this.props.match.url === '/admin/menu/new') {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/menu/new`)
+        .then((res) => res.json())
+        .then((res) =>
+          this.setState({ apiResponse: res }, this.genCurrentItemOptions)
+        )
+        .catch((error) => console.log(error));
     }
   }
 
   genCurrentItemOptions() {
-    if (this.state.apiResponse.onMenu.length > 0) {
+    if (
+      this.state.apiResponse.onMenu.length > 0 ||
+      this.state.apiResponse.offMenu.length > 0
+    ) {
       this.setState({
         onMenu: this.state.apiResponse.onMenu.map((item) => {
           return { value: item.Item_ID, label: item.Item_Name };

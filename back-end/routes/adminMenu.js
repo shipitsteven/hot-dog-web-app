@@ -38,6 +38,12 @@ router.get('/edit/:id', async (req, res) => {
   res.send(finalJSON);
 });
 
+router.get('/new', async (req, res) => {
+  const offMenu = (await db.promise().execute(queries.getOffMenuItems, [0]))[0];
+  console.log(offMenu);
+  res.status(200).send({ onMenu: [], offMenu });
+});
+
 router.put('/edit/:menuID', async (req, res) => {
   try {
     const { menuID, addItems, removeItems, title, description } = req.body;
