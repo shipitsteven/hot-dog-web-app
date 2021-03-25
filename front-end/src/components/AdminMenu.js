@@ -26,7 +26,7 @@ class AdminMenu extends React.Component {
         <Box>
           <h1 className="ui header">
             <img src="/images/menu.svg" alt="menu icon"></img>
-            Menu & Items
+            Menus
           </h1>
           <MenuTable apiResponse={this.state.apiResponse}></MenuTable>
         </Box>

@@ -182,7 +182,7 @@ class EditMenu extends React.Component {
               isSubmitting,
             }) => (
               <form className={`ui form`} onSubmit={handleSubmit}>
-                {`Debug message: ${JSON.stringify(values)}`}
+                {/* {`Debug message: ${JSON.stringify(values)}`} */}
                 <h3 className="ui centered dividing header">
                   {this.props.match.params.id
                     ? `Editing Menu ID - ${this.props.match.params.id}`
