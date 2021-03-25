@@ -30,7 +30,7 @@ class AdminMain extends React.Component {
 
               <div className="item ">
                 <Link to="/admin/menu" className="admin">
-                  Menus & Items
+                  Menus
                 </Link>
               </div>
 
