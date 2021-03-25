@@ -44,6 +44,7 @@ function App() {
         <Route path="/admin/logs" component={AdminLogs} />
         <Route path="/admin/menu" exact component={AdminMenu} />
         <Route path="/admin/menu/edit/:id" component={EditMenu} />
+        <Route path="/admin/menu/new" component={EditMenu} />
       </Switch>
     </BrowserRouter>
   );

@@ -15,6 +15,8 @@ const queries = {
     'UPDATE Menu SET Description_Menu = ?, Menu_Title = ? WHERE Menu_ID = ?;',
   addMenuItem: 'INSERT INTO Items_Menu VALUES (?, ?, "Y")',
   removeMenuItem: 'DELETE FROM Items_Menu WHERE MENU_ID = ? AND Item_ID = ?;',
+  createNewMenu:
+    'INSERT INTO Menu (Menu_Title, Description_Menu) VALUES (?, ?);',
 };
 
 router.get('/', async (req, res) => {
@@ -36,6 +38,11 @@ router.get('/edit/:id', async (req, res) => {
 
   let finalJSON = { onMenu, offMenu, menuInfo };
   res.send(finalJSON);
+});
+
+router.get('/new', async (req, res) => {
+  const offMenu = (await db.promise().execute(queries.getOffMenuItems, [0]))[0];
+  res.status(200).send({ onMenu: [], offMenu });
 });
 
 router.put('/edit/:menuID', async (req, res) => {
@@ -64,6 +71,28 @@ router.put('/edit/:menuID', async (req, res) => {
       );
     }
     res.send('Update Successful!');
+  } catch {
+    res.status(400).send('Something went wrong.');
+  }
+});
+
+router.post('/new', async (req, res) => {
+  try {
+    const { title, description, addItems } = req.body;
+    // create new menu
+    const newMenu = (
+      await db.promise().execute(queries.createNewMenu, [title, description])
+    )[0].insertId;
+    logger(1, `Admin created new menu ID ${newMenu}-${title}`);
+    // add items to new menu
+    if (addItems.length > 0) {
+      addItems.map(
+        async (item) =>
+          await db.promise().execute(queries.addMenuItem, [item, newMenu])
+      );
+      logger(1, `Admin added ${addItems.length} items to new menu ${newMenu}`);
+    }
+    res.send(`Successfully created new menu ID ${newMenu}-${title}`);
   } catch {
     res.status(400).send('Something went wrong.');
   }

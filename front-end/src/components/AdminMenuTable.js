@@ -51,13 +51,11 @@ class MenuTable extends React.Component {
               </button>
             </th>
             <th colSpan="1">
-              <button
-                className="ui right floated medium button"
-                style={{ textDecoration: 'line-through' }}
-                disabled={true}
-              >
-                Add new menu
-              </button>
+              <Link to="/admin/menu/new">
+                <button className="ui right floated green button">
+                  Add new menu
+                </button>
+              </Link>
             </th>
           </tr>
         </tfoot>

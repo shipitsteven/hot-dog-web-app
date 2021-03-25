@@ -13,9 +13,9 @@ const validationSchema = Yup.object().shape({
     .max(45, 'Title cannot have more than 45 characters')
     .required('Title cannot be empty'),
   description: Yup.string()
-    .min(1, 'Title cannot be less than 1 character')
-    .max(45, 'Title cannot have more than 45 characters')
-    .required('Title cannot be empty'),
+    .min(1, 'Description cannot be less than 1 character')
+    .max(45, 'Description cannot have more than 45 characters')
+    .required('Description cannot be empty'),
 });
 
 class EditMenu extends React.Component {
@@ -41,17 +41,21 @@ class EditMenu extends React.Component {
           this.setState({ apiResponse: res }, this.genCurrentItemOptions)
         )
         .catch((error) => console.log(error));
-      // } else if (this.props.match.url === '/admin/menu/new') {
-      //   fetch(`http://localhost:5000/admin/menu/new`)
-      //     .then((res) => res.json())
-      //     .then((res) => this.setState({ apiResponse: res }))
-      //     .catch((error) => console.log(error));
-      // }
+    } else if (this.props.match.url === '/admin/menu/new') {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/menu/new`)
+        .then((res) => res.json())
+        .then((res) =>
+          this.setState({ apiResponse: res }, this.genCurrentItemOptions)
+        )
+        .catch((error) => console.log(error));
     }
   }
 
   genCurrentItemOptions() {
-    if (this.state.apiResponse.onMenu.length > 0) {
+    if (
+      this.state.apiResponse.onMenu.length > 0 ||
+      this.state.apiResponse.offMenu.length > 0
+    ) {
       this.setState({
         onMenu: this.state.apiResponse.onMenu.map((item) => {
           return { value: item.Item_ID, label: item.Item_Name };
@@ -77,26 +81,52 @@ class EditMenu extends React.Component {
   }
 
   sendRequest(values) {
-    fetch(
-      `${process.env.REACT_APP_SERVER_URL}/admin/menu/edit/${this.props.match.params.id}`,
-      {
-        method: 'PUT',
+    if (this.props.match.url === '/admin/menu/new') {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/menu/new`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          menuID: parseInt(this.props.match.params.id),
-          ...values,
-        }),
-      }
-    )
-      .then((res) => res.text())
-      .then((res) => {
-        this.setState({ formSuccess: true, resMessage: res });
+        body: JSON.stringify(values),
       })
-      .catch((err) => console.log(err));
+        .then((res) => res.text())
+        .then((res) => {
+          this.setState({ formSuccess: true, resMessage: res });
+        })
+        .catch((err) => console.log(err));
+    } else {
+      fetch(
+        `${process.env.REACT_APP_SERVER_URL}/admin/menu/edit/${this.props.match.params.id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            menuID: parseInt(this.props.match.params.id),
+            ...values,
+          }),
+        }
+      )
+        .then((res) => res.text())
+        .then((res) => {
+          this.setState({ formSuccess: true, resMessage: res });
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   refreshPage() {
     window.location.reload();
+  }
+
+  disableButton(touched, errors) {
+    if (this.props.match.url === '/admin/menu/new') {
+      return (
+        !touched.title ||
+        !touched.description ||
+        errors.title ||
+        errors.description
+      );
+    } else {
+      return errors.title || errors.description;
+    }
   }
 
   render() {
@@ -123,6 +153,7 @@ class EditMenu extends React.Component {
             }`}
           >
             <h4 className="header">{this.state.resMessage}</h4>
+            <p>Refresh the page to see the latest changes</p>
           </div>
 
           <Formik
@@ -151,11 +182,11 @@ class EditMenu extends React.Component {
               isSubmitting,
             }) => (
               <form className={`ui form`} onSubmit={handleSubmit}>
-                {/* {`Debug message: ${JSON.stringify(values)}`} */}
+                {`Debug message: ${JSON.stringify(values)}`}
                 <h3 className="ui centered dividing header">
                   {this.props.match.params.id
                     ? `Editing Menu ID - ${this.props.match.params.id}`
-                    : 'Creating New Item'}
+                    : 'Creating New Menu'}
                 </h3>
 
                 <div
@@ -231,7 +262,7 @@ class EditMenu extends React.Component {
                 <button
                   className="ui large green button"
                   type="submit"
-                  disabled={errors.title || errors.description}
+                  disabled={this.disableButton(touched, errors)}
                 >
                   Submit
                 </button>
