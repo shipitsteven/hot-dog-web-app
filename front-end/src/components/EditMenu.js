@@ -81,22 +81,35 @@ class EditMenu extends React.Component {
   }
 
   sendRequest(values) {
-    fetch(
-      `${process.env.REACT_APP_SERVER_URL}/admin/menu/edit/${this.props.match.params.id}`,
-      {
-        method: 'PUT',
+    if (this.props.match.url === '/admin/menu/new') {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/admin/menu/new`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          menuID: parseInt(this.props.match.params.id),
-          ...values,
-        }),
-      }
-    )
-      .then((res) => res.text())
-      .then((res) => {
-        this.setState({ formSuccess: true, resMessage: res });
+        body: JSON.stringify(values),
       })
-      .catch((err) => console.log(err));
+        .then((res) => res.text())
+        .then((res) => {
+          this.setState({ formSuccess: true, resMessage: res });
+        })
+        .catch((err) => console.log(err));
+    } else {
+      fetch(
+        `${process.env.REACT_APP_SERVER_URL}/admin/menu/edit/${this.props.match.params.id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            menuID: parseInt(this.props.match.params.id),
+            ...values,
+          }),
+        }
+      )
+        .then((res) => res.text())
+        .then((res) => {
+          this.setState({ formSuccess: true, resMessage: res });
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   refreshPage() {
@@ -140,6 +153,7 @@ class EditMenu extends React.Component {
             }`}
           >
             <h4 className="header">{this.state.resMessage}</h4>
+            <p>Refresh the page to see the latest changes</p>
           </div>
 
           <Formik
@@ -168,7 +182,7 @@ class EditMenu extends React.Component {
               isSubmitting,
             }) => (
               <form className={`ui form`} onSubmit={handleSubmit}>
-                {/* {`Debug message: ${JSON.stringify(values)}`} */}
+                {`Debug message: ${JSON.stringify(values)}`}
                 <h3 className="ui centered dividing header">
                   {this.props.match.params.id
                     ? `Editing Menu ID - ${this.props.match.params.id}`
