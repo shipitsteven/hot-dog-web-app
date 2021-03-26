@@ -20,6 +20,7 @@ class CustomerMenu extends React.Component {
     this.state = {
       tableDataisFetched: false,
       formSuccess: false,
+      formFailure: false,
       resMessage: '',
     };
   }
@@ -99,25 +100,33 @@ class CustomerMenu extends React.Component {
           contact: '',
         }}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          await new Promise((r) => setTimeout(r, 500));
-          let orderInfo = this.getOrder();
-          for (const key in values) {
-            orderInfo[key] = values[key];
-          }
+          this.setState({ formSuccess: false, formFailure: false }, () => {
+            let orderInfo = this.getOrder();
+            for (const key in values) {
+              orderInfo[key] = values[key];
+            }
 
-          // submit order to back-end
-          fetch(`${process.env.REACT_APP_SERVER_URL}/customer/order/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderInfo),
-          })
-            .then((res) => res.text())
-            .then((res) => {
-              this.setState({ formSuccess: true, resMessage: res });
+            // submit order to back-end
+            fetch(`${process.env.REACT_APP_SERVER_URL}/customer/order/`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(orderInfo),
             })
-            .catch((err) => console.log(err));
+              .then((res) => {
+                if (res.ok) {
+                  this.setState({ formSuccess: true }, () => resetForm());
+                } else {
+                  this.setState({ formFailure: true });
+                }
+                return res;
+              })
+              .then((res) => res.text())
+              .then((res) => {
+                this.setState({ resMessage: res });
+              })
+              .catch((err) => console.log(err));
+          });
 
-          resetForm();
           setSubmitting(false);
         }}
       >
@@ -221,6 +230,13 @@ class CustomerMenu extends React.Component {
           <div
             className={`ui success message ${
               this.state.formSuccess ? null : `hidden`
+            }`}
+          >
+            <h4 className="header">{this.state.resMessage}</h4>
+          </div>
+          <div
+            className={`ui warning message ${
+              this.state.formFailure ? null : `hidden`
             }`}
           >
             <h4 className="header">{this.state.resMessage}</h4>
