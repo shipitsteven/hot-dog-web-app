@@ -63,9 +63,7 @@ class EditUser extends React.Component {
       )
         .then((res) => res.text())
         .then((res) => {
-          this.setState({ formSuccess: true, resMessage: res }, () =>
-            console.log(res)
-          );
+          this.setState({ formSuccess: true, resMessage: res });
         })
         .catch((err) => console.log(err));
     }
