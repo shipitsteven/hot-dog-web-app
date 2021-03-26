@@ -17,7 +17,11 @@ const validationSchema = Yup.object().shape({
 class CustomerMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tableDataisFetched: false };
+    this.state = {
+      tableDataisFetched: false,
+      formSuccess: false,
+      resMessage: '',
+    };
   }
 
   getOrder() {
@@ -94,7 +98,7 @@ class CustomerMenu extends React.Component {
           lastName: '',
           contact: '',
         }}
-        onSubmit={async (values) => {
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
           await new Promise((r) => setTimeout(r, 500));
           let orderInfo = this.getOrder();
           for (const key in values) {
@@ -106,13 +110,15 @@ class CustomerMenu extends React.Component {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderInfo),
-          });
+          })
+            .then((res) => res.text())
+            .then((res) => {
+              this.setState({ formSuccess: true, resMessage: res });
+            })
+            .catch((err) => console.log(err));
 
-          // provide user confirmation of order submission
-          alert('Order Submitted, Thank you');
-
-          // refresh page
-          window.location.reload();
+          resetForm();
+          setSubmitting(false);
         }}
       >
         {({
@@ -175,7 +181,8 @@ class CustomerMenu extends React.Component {
                 errors.contact ||
                 !touched.firstName ||
                 !touched.lastName ||
-                !touched.contact
+                !touched.contact ||
+                isSubmitting
               }
             >
               Submit
@@ -211,6 +218,13 @@ class CustomerMenu extends React.Component {
             {this.renderItems()}
           </table>
           <h1>Order Submission</h1>
+          <div
+            className={`ui success message ${
+              this.state.formSuccess ? null : `hidden`
+            }`}
+          >
+            <h4 className="header">{this.state.resMessage}</h4>
+          </div>
           {this.getForm()}
         </div>
       </Container>
