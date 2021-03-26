@@ -1,8 +1,21 @@
-
+-- -----------------------------------------------------
+-- Drop existing tables
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `USERS_CART`;
+DROP TABLE IF EXISTS `ORDERS_ITEMS`;
+DROP TABLE IF EXISTS `CART_ORDERS`;
+DROP TABLE IF EXISTS `USER_LOGS`;
+DROP TABLE IF EXISTS `LOG`;
+DROP TABLE IF EXISTS `ORDER_USERS`;
+DROP TABLE IF EXISTS `ORDERS`;
+DROP TABLE IF EXISTS `CART`;
+DROP TABLE IF EXISTS `ITEMS_MENU`;
+DROP TABLE IF EXISTS `ITEMS`;
+DROP TABLE IF EXISTS `MENU`;
+DROP TABLE IF EXISTS `USERS`;
 -- -----------------------------------------------------
 -- Table `USERS`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `USERS`;
 CREATE TABLE IF NOT EXISTS `USERS` (
   `USER_ID` INT NOT NULL AUTO_INCREMENT,
   `EMAIL` VARCHAR(45) NOT NULL,
@@ -18,7 +31,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `MENU`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `MENU`;
 CREATE TABLE IF NOT EXISTS `MENU` (
   `MENU_ID` INT NOT NULL AUTO_INCREMENT,
   `DESCRIPTION_MENU` VARCHAR(45) NOT NULL,
@@ -30,7 +42,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ITEMS`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ITEMS`;
 CREATE TABLE IF NOT EXISTS `ITEMS` (
   `ITEM_ID` INT NOT NULL AUTO_INCREMENT,
   `ITEM_NAME` VARCHAR(45) NOT NULL,
@@ -44,7 +55,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ITEMS_MENU`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ITEMS_MENU`;
 CREATE TABLE IF NOT EXISTS `ITEMS_MENU` (
   `ITEM_ID` INT NOT NULL,
   `MENU_ID` INT NOT NULL,
@@ -68,7 +78,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `CART`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `CART`;
 CREATE TABLE IF NOT EXISTS `CART` (
   `CART_ID` INT NOT NULL AUTO_INCREMENT,
   `LOCATION` VARCHAR(45) NOT NULL,
@@ -87,7 +96,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ORDERS`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ORDERS`;
 CREATE TABLE IF NOT EXISTS `ORDERS` (
   `ORDER_ID` INT NOT NULL AUTO_INCREMENT,
   `DATE` DATETIME NOT NULL,
@@ -98,7 +106,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ORDER_USERS`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ORDER_USERS`;
 CREATE TABLE IF NOT EXISTS `ORDER_USERS` (
   `USER_ID` INT NOT NULL,
   `ORDER_ID` INT NOT NULL,
@@ -121,7 +128,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `LOG`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `LOG`;
 CREATE TABLE IF NOT EXISTS `LOG` (
   `LOG_ITEM_ID` INT NOT NULL AUTO_INCREMENT,
   `DATETIME` DATETIME NOT NULL,
@@ -133,7 +139,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `USER_LOGS`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `USER_LOGS`;
 CREATE TABLE IF NOT EXISTS `USER_LOGS` (
   `USER_ID` INT NOT NULL,
   `LOG_ITEM_ID` INT NOT NULL,
@@ -156,7 +161,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `CART_ORDERS`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `CART_ORDERS`;
 CREATE TABLE IF NOT EXISTS `CART_ORDERS` (
   `CART_ID` INT NOT NULL,
   `ORDER_ID` INT NOT NULL,
@@ -180,7 +184,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ORDERS_ITEMS`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ORDERS_ITEMS`;
 CREATE TABLE IF NOT EXISTS `ORDERS_ITEMS` (
   `ORDER_ID` INT NOT NULL,
   `ITEM_ID` INT NOT NULL,
@@ -204,7 +207,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `USERS_CART`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `USERS_CART`;
 CREATE TABLE IF NOT EXISTS `USERS_CART` (
   `USER_ID` INT NOT NULL,
   `CART_ID` INT NOT NULL,
