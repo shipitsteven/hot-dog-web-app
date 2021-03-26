@@ -37,7 +37,6 @@ router.post('/order', async (req, res) => {
     } else {
       customerID = existingUser[0].User_ID;
     }
-    logger(customerID, `${firstName} ${lastName} placed an order`);
 
     const orderID = (await db.promise().execute(queries.createNewOrder))[0]
       .insertId;
@@ -54,38 +53,55 @@ router.post('/order', async (req, res) => {
       itemsArray.push(i);
     }
 
-    // add items to order
-    for (const key in requestData) {
-      if (key === 'order') {
-        for (const value in requestData[key]) {
-          let itemid = parseInt(value);
-          let quantity = requestData[key][value];
-          if (itemsArray.includes(itemid) && quantity > 0) {
-            let addItemQuery = await `INSERT INTO ORDERS_ITEMS
+    // check for empty order
+    try {
+      let totalQuantity = 0;
+      // add items to order
+      for (const key in requestData) {
+        if (key === 'order') {
+          for (const value in requestData[key]) {
+            let itemid = parseInt(value);
+            let quantity = requestData[key][value];
+
+            if (itemsArray.includes(itemid) && quantity > 0) {
+              totalQuantity += quantity;
+              let addItemQuery = await `INSERT INTO ORDERS_ITEMS
           (ORDER_ID, ITEM_ID, QUANTITY)
           VALUES 	
             (${orderID}, ${itemid}, ${quantity});
           `;
-            let addItem = await db.promise().query(addItemQuery);
+              let addItem = await db.promise().query(addItemQuery);
+            }
           }
         }
       }
-    }
 
-    // add order to CART_ORDERS
-    let addItemsCartQuery = `INSERT INTO CART_ORDERS(CART_ID, ORDER_ID, COMPLETE)
+      console.log(totalQuantity);
+      if (totalQuantity === 0) {
+        throw new Error();
+      }
+
+      // add order to CART_ORDERS
+      let addItemsCartQuery = `INSERT INTO CART_ORDERS(CART_ID, ORDER_ID, COMPLETE)
     VALUES	(${cartID}, ${orderID}, "N")
     ;`;
 
-    let cartOrders = await db.promise().query(addItemsCartQuery);
+      let cartOrders = await db.promise().query(addItemsCartQuery);
 
-    // add order to ORDER_USERS
-    let orderUsersQuery = `INSERT INTO ORDER_USERS(USER_ID, ORDER_ID)
+      // add order to ORDER_USERS
+      let orderUsersQuery = `INSERT INTO ORDER_USERS(USER_ID, ORDER_ID)
     VALUES  (${customerID}, ${orderID})
     ;`;
-    let userOrders = await db.promise().query(orderUsersQuery);
+      let userOrders = await db.promise().query(orderUsersQuery);
+      logger(
+        customerID,
+        `${firstName} ${lastName} placed an order ID ${orderID} to cart ${cartID}`
+      );
 
-    res.send(`Order placed successfully, your order ID is ${orderID}`);
+      res.send(`Order placed successfully, your order ID is ${orderID}`);
+    } catch {
+      res.status(400).send('You cannot place an empty order');
+    }
   } catch {
     res.status(400).send('Something went wrong.');
   }
