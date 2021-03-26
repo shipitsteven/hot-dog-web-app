@@ -2,6 +2,17 @@ import React from 'react';
 import TableRow from './TableRow';
 import { Formik, Field, Form } from 'formik';
 import { Link } from 'react-router-dom';
+import Container from '../components/Container';
+import * as Yup from 'yup';
+import Error from '../components/Error';
+
+const validationSchema = Yup.object().shape({
+  contact: Yup.string()
+    .email('Must be a valid email address')
+    .required('Email cannot be empty'),
+  firstName: Yup.string().required('First Name cannot be empty'),
+  lastName: Yup.string().required('Last Name cannot be empty'),
+});
 
 class CustomerMenu extends React.Component {
   constructor(props) {
@@ -19,29 +30,8 @@ class CustomerMenu extends React.Component {
       cartID: this.props.cartID,
       userID: 2,
     };
-    console.log(orderJSON);
     return orderJSON;
   }
-
-  submitOrder = () => {
-    // create JSON object for back-end API
-    let order = {};
-    for (let key in this.state) {
-      order[key] = this.state[key];
-    }
-    let orderJSON = {
-      order: order,
-      cartID: this.props.cartID,
-      userID: 2,
-    };
-
-    fetch(`${process.env.REACT_APP_SERVER_URL}/customer/order/`, {
-      method: 'PUT',
-      body: orderJSON,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(orderJSON),
-    });
-  };
 
   componentDidMount() {
     this.getData();
@@ -72,7 +62,11 @@ class CustomerMenu extends React.Component {
   updateQuantities = (data) => this.setState({ [data.ITEM_ID]: data.quantity });
 
   renderItems() {
-    let output = 'Loading...';
+    let output = (
+      <tr>
+        <td>'Loading...'</td>
+      </tr>
+    );
     if (this.state.tableDataisFetched) {
       output = this.state.apiData.map((item) => {
         return (
@@ -81,7 +75,7 @@ class CustomerMenu extends React.Component {
             item={item.ITEM_ID}
             name={item.ITEM_NAME}
             description={item.DESCRIPTION_ITEM}
-            price={item.PRICE}
+            price={`$${item.PRICE / 100}`}
             quantity={this.state[item.ITEM_ID]}
             onChange={this.updateQuantities.bind(this)}
           />
@@ -94,6 +88,7 @@ class CustomerMenu extends React.Component {
   getForm() {
     return (
       <Formik
+        validationSchema={validationSchema}
         initialValues={{
           firstName: '',
           lastName: '',
@@ -105,12 +100,10 @@ class CustomerMenu extends React.Component {
           for (const key in values) {
             orderInfo[key] = values[key];
           }
-          console.log(orderInfo);
 
           // submit order to back-end
           fetch(`${process.env.REACT_APP_SERVER_URL}/customer/order/`, {
-            method: 'PUT',
-            body: orderInfo,
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderInfo),
           });
@@ -119,56 +112,108 @@ class CustomerMenu extends React.Component {
           alert('Order Submitted, Thank you');
 
           // refresh page
-          window.location.reload(false);
+          window.location.reload();
         }}
       >
-        <Form>
-          <label htmlFor="firstName">First Name</label>
-          <Field id="firstName" name="firstName" placeholder="First Name" />
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+        }) => (
+          <form className="ui form" onSubmit={handleSubmit}>
+            <div className="two fields">
+              <div
+                className={`field ${
+                  touched.firstName && errors.firstName ? `error` : null
+                }`}
+              >
+                <label htmlFor="firstName">First Name</label>
+                <Field
+                  id="firstName"
+                  name="firstName"
+                  placeholder="First Name"
+                />
+                <Error touched={touched.firstName} message={errors.firstName} />
+              </div>
 
-          <label htmlFor="lastName">Last Name</label>
-          <Field id="lastName" name="lastName" placeholder="Last Name" />
+              <div
+                className={`field ${
+                  touched.lastName && errors.lastName ? `error` : null
+                }`}
+              >
+                <label htmlFor="lastName">Last Name</label>
+                <Field id="lastName" name="lastName" placeholder="Last Name" />
+                <Error touched={touched.lastName} message={errors.lastName} />
+              </div>
+            </div>
 
-          <label htmlFor="contact">Contact</label>
-          <Field
-            id="contact"
-            name="contact"
-            placeholder="Phone (preferred) or Email"
-            type="text"
-          />
-          <button type="submit">Submit</button>
-        </Form>
+            <div
+              className={`field ${
+                touched.contact && errors.contact ? `error` : null
+              }`}
+            >
+              <label htmlFor="contact">Contact</label>
+              <Field
+                id="contact"
+                name="contact"
+                placeholder="Valid e-mail required"
+                type="text"
+              />
+              <Error touched={touched.contact} message={errors.contact} />
+            </div>
+            <button
+              type="submit"
+              className="ui medium green button"
+              style={{ marginBottom: '5vh' }}
+              disabled={
+                errors.firstName ||
+                errors.lastName ||
+                errors.contact ||
+                !touched.firstName ||
+                !touched.lastName ||
+                !touched.contact
+              }
+            >
+              Submit
+            </button>
+          </form>
+        )}
       </Formik>
     );
   }
 
   render() {
     return (
-      <div>
-        <Link to={`/customer/map`}>
-          <button className="large ui blue button">Return to Map</button>
-        </Link>
-        <Link to={`/`}>
-          <button className="large ui blue button">Return to Home</button>
-        </Link>
-        <h1>Menu</h1>
-        <table className="ui celled table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Add</th>
-              <th>Remove</th>
-              <th>Quantity</th>
-            </tr>
-          </thead>
-          {this.renderItems()}
-        </table>
-        <h1>Order Submission</h1>
-        {this.getForm()}
-        {/*<button onClick={this.submitOrder}> Submit Order</button>*/}
-      </div>
+      <Container>
+        <div>
+          <Link to={`/customer/map`}>
+            <button className="large ui blue button">Return to Map</button>
+          </Link>
+          <Link to={`/`}>
+            <button className="large ui blue button">Return to Home</button>
+          </Link>
+          <h1>Menu</h1>
+          <table className="ui celled table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Add</th>
+                <th>Remove</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            {this.renderItems()}
+          </table>
+          <h1>Order Submission</h1>
+          {this.getForm()}
+        </div>
+      </Container>
     );
   }
 }
