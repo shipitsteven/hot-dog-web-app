@@ -1,4 +1,4 @@
-USE mydb;
+SET @@auto_increment_increment=1;
 
 INSERT INTO ITEMS (ITEM_NAME, ITEM_CATEGORY, PRICE, DESCRIPTION_ITEM)
 VALUES 	("Seattle Dog", "Food", 499, "Our most popular item the Seattle Dog. Cream cheese, relish, beef dog, on brioche bun."),
