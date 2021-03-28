@@ -1,4 +1,3 @@
-// import fetch from 'node-fetch';
 import React from 'react';
 
 class SubTotalRow extends React.Component {
