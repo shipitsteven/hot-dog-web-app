@@ -27,7 +27,11 @@ class AllOrders extends React.Component {
   };
 
   renderOrders() {
-    let output = 'Loading...';
+    let output = (
+      <tr>
+        <th>'Loading...'</th>
+      </tr>
+    );
     if (this.state.tableDataisFetched) {
       output = this.state.apiData.map((item) => {
         return (
@@ -50,12 +54,14 @@ class AllOrders extends React.Component {
     return (
       <table className="ui celled table">
         <thead>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Contact</th>
-          <th>Item</th>
-          <th>Price</th>
-          <th>Quantity</th>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Quantity</th>
+          </tr>
         </thead>
         <tbody>{this.renderOrders()}</tbody>
       </table>

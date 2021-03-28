@@ -19,12 +19,23 @@ class VendorMain extends React.Component {
     fetch(`${process.env.REACT_APP_SERVER_URL}/vendor/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        this.setState({
-          apiResponse: res,
-          available: res.cart[0].available,
-          center: { lat: res.cart[0].lat, lng: res.cart[0].lng },
-          error: false,
-        });
+        if (res.cart !== undefined) {
+          this.setState({
+            apiResponse: res,
+            available: res.cart[0].available,
+            center: { lat: res.cart[0].lat, lng: res.cart[0].lng },
+            error: false,
+          });
+        } else {
+          this.setState({
+            apiResponse: {
+              vendorFirstName: 'something went wrong',
+              vendorLastName: '',
+            },
+            error: true,
+            message: 'You do not have an active cart.',
+          });
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -136,7 +147,12 @@ class VendorMain extends React.Component {
             </div>
             <div className="column">
               <Link to={`/vendor/orders/${cartID}`}>
-                <button className="large ui blue button">Manage Orders</button>
+                <button
+                  className="large ui blue button"
+                  disabled={this.state.error}
+                >
+                  Manage Orders
+                </button>
               </Link>
             </div>
             <div className="column">

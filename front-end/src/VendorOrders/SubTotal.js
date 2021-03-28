@@ -30,14 +30,18 @@ class SubTotal extends React.Component {
   }
 
   renderRows() {
-    let output = 'Loading content...';
+    let output = (
+      <tr>
+        <td>'Loading content...'</td>
+      </tr>
+    );
     if (this.state.apiDataSubTotal) {
       output = this.state.apiDataSubTotal.map((item) => {
         return (
           <SubTotalRow
             key={item.ORDER_ID}
             order={item.ORDER_ID}
-            total={item.TOTAL}
+            total={`$${item.TOTAL / 100}`}
           />
         );
       });
@@ -47,11 +51,13 @@ class SubTotal extends React.Component {
 
   render() {
     return (
-      <table className="ui celled table">
+      <table className="ui green celled table">
         <thead>
-          <th>ORDER ID</th>
-          <th>TOTAL ($)</th>
-          <th>Status</th>
+          <tr>
+            <th>ORDER ID</th>
+            <th>TOTAL ($)</th>
+            <th>Status</th>
+          </tr>
         </thead>
         <tbody>{this.renderRows()}</tbody>
       </table>

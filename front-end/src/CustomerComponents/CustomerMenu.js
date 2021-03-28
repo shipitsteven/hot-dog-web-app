@@ -8,10 +8,15 @@ import Error from '../components/Error';
 
 const validationSchema = Yup.object().shape({
   contact: Yup.string()
+    .max(45, 'Email cannot have more than 45 characters')
     .email('Must be a valid email address')
     .required('Email cannot be empty'),
-  firstName: Yup.string().required('First Name cannot be empty'),
-  lastName: Yup.string().required('Last Name cannot be empty'),
+  firstName: Yup.string()
+    .max(45, 'First name cannot have more than 45 characters')
+    .required('First Name cannot be empty'),
+  lastName: Yup.string()
+    .max(45, 'Last name cannot have more than 45 characters')
+    .required('Last Name cannot be empty'),
 });
 
 class CustomerMenu extends React.Component {
