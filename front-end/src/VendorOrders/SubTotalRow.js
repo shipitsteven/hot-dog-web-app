@@ -36,11 +36,17 @@ class SubTotalRow extends React.Component {
       <tr>
         <td>{this.props.order}</td>
         <td>{this.props.total}</td>
-        <button onClick={this.handleOpenModal}>Paid</button>
-        <ReactModal isOpen={this.state.showModal} order={this.props.order}>
-          <button onClick={this.handleCloseModal}>Close</button>
-          <button onClick={this.completeOrder}>Confirm</button>
-        </ReactModal>
+        <td>
+          <button onClick={this.handleOpenModal}>Paid</button>
+          <ReactModal
+            isOpen={this.state.showModal}
+            order={this.props.order}
+            appElement={document.getElementById('root')}
+          >
+            <button onClick={this.handleCloseModal}>Close</button>
+            <button onClick={this.completeOrder}>Confirm</button>
+          </ReactModal>
+        </td>
       </tr>
     );
   }
