@@ -1,7 +1,7 @@
 # Under construction...
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/595ccb16-3d46-4e57-ad8a-a8a17308c069/deploy-status)](https://app.netlify.com/sites/hotdog-webapp/deploys)
-![Heroku](https://pyheroku-badge.herokuapp.com/?app=hot-dog-web-app&style=flat)
+Client: [![Netlify Status](https://api.netlify.com/api/v1/badges/595ccb16-3d46-4e57-ad8a-a8a17308c069/deploy-status)](https://app.netlify.com/sites/hotdog-webapp/deploys)  
+Server: ![Heroku](https://pyheroku-badge.herokuapp.com/?app=hot-dog-web-app&style=flat)
 
 You can see the last updated version (3/20/2021) at [https://hotdog-webapp.netlify.app/](https://hotdog-webapp.netlify.app/)
 
