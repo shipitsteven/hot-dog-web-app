@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from './Container';
-import Map from './Map';
 import CustomerMap from './CustomerMap';
+import 'cirrus-ui';
 
 class CustomerMain extends React.Component {
   constructor(props) {
@@ -36,14 +36,17 @@ class CustomerMain extends React.Component {
     return (
       <div>
         <Container>
-          <div style={{ marginTop: '2vh', marginBottom: '2vh' }}>
-            <h3 className="ui huge header centered">
+          <div
+            style={{ marginTop: '2vh', marginBottom: '2vh' }}
+            className="u-center"
+          >
+            <h1>
               Welcome, there are{' '}
               <span style={{ color: 'brown' }}>
                 {this.state.apiResponse.cart?.length} carts
               </span>{' '}
               near you
-            </h3>
+            </h1>
           </div>
         </Container>
         <CustomerMap
