@@ -119,16 +119,20 @@ export default function CustomerMap(props) {
                   : 'currently closed, check back soon!'}
                 {/* </span> */}
               </p>
-              <Link to={`/customer/menu/${selected.Cart_ID}`}>
-                <button
-                  disabled={selected.Available ? false : true}
-                  className={`ui button ${
-                    selected.Available ? `green` : `orange`
-                  }`}
+
+              <button
+                disabled={selected.Available ? false : true}
+                className={`ui button ${
+                  selected.Available ? `green` : `orange`
+                }`}
+              >
+                <Link
+                  to={`/customer/menu/${selected.Cart_ID}`}
+                  style={{ textDecoration: 'none', color: 'white' }}
                 >
                   {`${selected.Available ? `See Menu` : `Sorry We're Closed`}`}
-                </button>
-              </Link>
+                </Link>
+              </button>
             </div>
           </InfoWindow>
         ) : null}
