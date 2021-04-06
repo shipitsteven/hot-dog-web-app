@@ -23,7 +23,7 @@ function Home() {
       <div className="hero fullscreen bg-orange-300">
         <div className="hero-body">
           <div className="mx-auto">
-            <h1 className="title uppercase headline-4">
+            <h1 className="title uppercase headline-4 animated fadeIn">
               Welcome to <mark>Dog Haus</mark>
             </h1>
 
@@ -45,9 +45,15 @@ function Home() {
             <h5>
               Server is{' '}
               <span style={{ color: `${serverStatus ? 'green' : 'red'}` }}>
-                {serverStatus ? 'ready' : 'warming up...'}
-              </span>
+                {serverStatus ? `ready` : 'warming up...'}
+              </span>{' '}
+              {serverStatus ? (
+                <i className="wifi icon animated fadeIn infinite alternate"></i>
+              ) : (
+                <div className="ui active inverted small inline loader"></div>
+              )}
             </h5>
+
             <p>
               Please be patient as Heroku may have a long cold start time, this
               might take 1-2 minutes
