@@ -16,11 +16,11 @@ Hosting: Heroku (server), Netlify (client)
 
 ## Design decisions
 
-This was my first project using React. Thus, there's a some simplification of certain engineering approaches. One that stands out is the lack of user authentication. In a real business site, this would be essential. However, due to time constraint, and the sake of practicing a new framework. I hope to integrate user authentication in a future project, currently there's no plan to bring authentication to this project.
+This was my first project using React. Thus, there are some simplification of certain engineering approaches. One that stands out is the lack of user authentication. In a real business site, this would be essential. However, due to time constraint, authentication did not fall within the scope of this project.
 
-Online payment is also not included for the same reason stated above.
+Online payment system is also not included for the same reason stated above.
 
-Semantic UI and Cirrus UI are used to reduce time spent decorating UI components.
+Semantic UI and Cirrus UI are used to reduce time spent styling UI components.
 
 ClearDB is the substitution for MySQL that resides on the Heroku server.
 
